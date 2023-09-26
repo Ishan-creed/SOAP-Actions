@@ -1,0 +1,70 @@
+<definitions
+    name="TemperatureConverterService"
+    targetNamespace="http://yournamespace.com/temperatureconverter.wsdl"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://yournamespace.com/temperatureconverter.wsdl"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <!-- Define types (data types) -->
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://yournamespace.com/temperatureconverter.wsdl">
+            <!-- Define the User data type -->
+            <element name="Temperature">
+                <complexType>
+                    <sequence>
+                        <element name="Celsius" type="xs:double"/>
+                    </sequence>
+                </complexType>
+            </element>
+            
+            <!-- Define the Response data type -->
+            <element name="TemperatureResponse">
+                <complexType>
+                    <sequence>
+                        <element name="Fahrenheit" type="xs:double"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </types>
+    
+    <!-- Define the messages -->
+    <message name="ConvertCelsiusToFahrenheitRequest">
+        <part name="Temperature" element="tns:Temperature"/>
+    </message>
+    
+    <message name="ConvertCelsiusToFahrenheitResponse">
+        <part name="TemperatureResponse" element="tns:TemperatureResponse"/>
+    </message>
+    
+    <!-- Define the port type (operations) -->
+    <portType name="TemperatureConverterPortType">
+        <operation name="ConvertCelsiusToFahrenheit">
+            <input message="tns:ConvertCelsiusToFahrenheitRequest"/>
+            <output message="tns:ConvertCelsiusToFahrenheitResponse"/>
+        </operation>
+    </portType>
+    
+    <!-- Define the binding (how the service communicates) -->
+    <binding name="TemperatureConverterBinding" type="tns:TemperatureConverterPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ConvertCelsiusToFahrenheit">
+            <soap:operation soapAction="urn:ConvertCelsiusToFahrenheit"/>
+            <input>
+                <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://yournamespace.com/temperatureconverter.wsdl" use="encoded"/>
+            </input>
+            <output>
+                <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://yournamespace.com/temperatureconverter.wsdl" use="encoded"/>
+            </output>
+        </operation>
+    </binding>
+    
+    <!-- Define the service -->
+    
+    <service name="TemperatureConverterService">
+        <port name="TemperatureConverterPort" binding="tns:TemperatureConverterBinding">
+            <soap:address location="http://localhost:3000/temperatureConverter"/>
+        </port>
+    </service>
+</definitions>
